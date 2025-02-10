@@ -23,7 +23,7 @@ namespace ScrapeUIusingGalleryDL
         {
             this.Delay_trackbar.Maximum = 12;
             Refresh_Domain_ComboBox_Click(e,e);
-            Domain_ComboBox.SelectedIndex = 0;
+            
 
         }
 
@@ -294,6 +294,12 @@ namespace ScrapeUIusingGalleryDL
 
         private void Refresh_Domain_ComboBox_Click(object sender, EventArgs e)
         {
+            if (!File.Exists("Bin\\Memory\\ScrapedLinks.txt"))
+            {
+                ChangeStatus("No ScrapedLinks saved to display");
+                return;
+
+            }
             Domain_ComboBox.Items.Clear();
             string[] Links = File.ReadAllLines("Bin\\Memory\\ScrapedLinks.txt");
             string[] LinksInComboBox = new string[Links.Length];
@@ -305,7 +311,8 @@ namespace ScrapeUIusingGalleryDL
                     Domain_ComboBox.Items.Add(host);
                     LinksInComboBox[i] = host;
                 }
-            }           
+            }
+            Domain_ComboBox.SelectedIndex = 0;
         }
         public static bool CheckForCompatibleBrowser()
         {
