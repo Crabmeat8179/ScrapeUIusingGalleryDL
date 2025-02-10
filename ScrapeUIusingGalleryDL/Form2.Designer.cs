@@ -28,26 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Delay_Between_Scrapes = new CheckBox();
             ReScrape_Previous = new Button();
             ReScape_From_Specific_Domain = new Button();
-            Domain_Of_Choice = new TextBox();
             New_Cookie_Needed_Domain = new TextBox();
             Add_New_Cookie_Domain_Button = new Button();
-            Delay_between_scrapes_seconds = new TextBox();
             One_Scrape_CheckBox = new CheckBox();
+            Delay_trackbar = new TrackBar();
+            label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
+            Domain_ComboBox = new ComboBox();
+            Refresh_Domain_ComboBox = new Button();
+            ((System.ComponentModel.ISupportInitialize)Delay_trackbar).BeginInit();
             SuspendLayout();
-            // 
-            // Delay_Between_Scrapes
-            // 
-            Delay_Between_Scrapes.AutoSize = true;
-            Delay_Between_Scrapes.Location = new Point(393, 22);
-            Delay_Between_Scrapes.Name = "Delay_Between_Scrapes";
-            Delay_Between_Scrapes.Size = new Size(216, 19);
-            Delay_Between_Scrapes.TabIndex = 13;
-            Delay_Between_Scrapes.Text = "Delay between Scrapes         seconds";
-            Delay_Between_Scrapes.UseVisualStyleBackColor = true;
-            Delay_Between_Scrapes.CheckedChanged += Delay_Between_Scrapes_CheckedChanged;
             // 
             // ReScrape_Previous
             // 
@@ -69,14 +62,6 @@
             ReScape_From_Specific_Domain.UseVisualStyleBackColor = true;
             ReScape_From_Specific_Domain.Click += button1_Click;
             // 
-            // Domain_Of_Choice
-            // 
-            Domain_Of_Choice.Location = new Point(52, 172);
-            Domain_Of_Choice.Name = "Domain_Of_Choice";
-            Domain_Of_Choice.Size = new Size(205, 23);
-            Domain_Of_Choice.TabIndex = 15;
-            Domain_Of_Choice.Text = "example.com";
-            // 
             // New_Cookie_Needed_Domain
             // 
             New_Cookie_Needed_Domain.Location = new Point(393, 172);
@@ -95,20 +80,12 @@
             Add_New_Cookie_Domain_Button.UseVisualStyleBackColor = true;
             Add_New_Cookie_Domain_Button.Click += Add_New_Cookie_Domain_Button_Click;
             // 
-            // Delay_between_scrapes_seconds
-            // 
-            Delay_between_scrapes_seconds.Location = new Point(536, 14);
-            Delay_between_scrapes_seconds.Name = "Delay_between_scrapes_seconds";
-            Delay_between_scrapes_seconds.Size = new Size(20, 23);
-            Delay_between_scrapes_seconds.TabIndex = 18;
-            Delay_between_scrapes_seconds.Text = "5";
-            // 
             // One_Scrape_CheckBox
             // 
             One_Scrape_CheckBox.AutoSize = true;
             One_Scrape_CheckBox.Checked = true;
             One_Scrape_CheckBox.CheckState = CheckState.Checked;
-            One_Scrape_CheckBox.Location = new Point(393, 55);
+            One_Scrape_CheckBox.Location = new Point(414, 78);
             One_Scrape_CheckBox.Name = "One_Scrape_CheckBox";
             One_Scrape_CheckBox.Size = new Size(135, 19);
             One_Scrape_CheckBox.TabIndex = 19;
@@ -116,37 +93,97 @@
             One_Scrape_CheckBox.UseVisualStyleBackColor = true;
             One_Scrape_CheckBox.CheckedChanged += One_Scrape_CheckBox_CheckedChanged;
             // 
+            // Delay_trackbar
+            // 
+            Delay_trackbar.LargeChange = 1;
+            Delay_trackbar.Location = new Point(407, 27);
+            Delay_trackbar.Name = "Delay_trackbar";
+            Delay_trackbar.Size = new Size(194, 45);
+            Delay_trackbar.TabIndex = 20;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(439, 9);
+            label1.Name = "label1";
+            label1.Size = new Size(127, 15);
+            label1.TabIndex = 21;
+            label1.Text = "Delay Between Scrapes";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(414, 57);
+            label2.Name = "label2";
+            label2.Size = new Size(13, 15);
+            label2.TabIndex = 22;
+            label2.Text = "0";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(579, 58);
+            label3.Name = "label3";
+            label3.Size = new Size(19, 15);
+            label3.TabIndex = 23;
+            label3.Text = "60";
+            // 
+            // Domain_ComboBox
+            // 
+            Domain_ComboBox.FormattingEnabled = true;
+            Domain_ComboBox.Location = new Point(52, 172);
+            Domain_ComboBox.Name = "Domain_ComboBox";
+            Domain_ComboBox.Size = new Size(124, 23);
+            Domain_ComboBox.TabIndex = 24;
+            Domain_ComboBox.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+            // 
+            // Refresh_Domain_ComboBox
+            // 
+            Refresh_Domain_ComboBox.Location = new Point(182, 172);
+            Refresh_Domain_ComboBox.Name = "Refresh_Domain_ComboBox";
+            Refresh_Domain_ComboBox.Size = new Size(75, 23);
+            Refresh_Domain_ComboBox.TabIndex = 25;
+            Refresh_Domain_ComboBox.Text = "Refresh";
+            Refresh_Domain_ComboBox.UseVisualStyleBackColor = true;
+            Refresh_Domain_ComboBox.Click += Refresh_Domain_ComboBox_Click;
+            // 
             // EXTRA_Window
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(649, 299);
+            Controls.Add(Refresh_Domain_ComboBox);
+            Controls.Add(Domain_ComboBox);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(Delay_trackbar);
             Controls.Add(One_Scrape_CheckBox);
-            Controls.Add(Delay_between_scrapes_seconds);
             Controls.Add(Add_New_Cookie_Domain_Button);
             Controls.Add(New_Cookie_Needed_Domain);
-            Controls.Add(Domain_Of_Choice);
             Controls.Add(ReScape_From_Specific_Domain);
-            Controls.Add(Delay_Between_Scrapes);
             Controls.Add(ReScrape_Previous);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "EXTRA_Window";
             Text = "Extra";
             Load += EXTRA_Window_Load;
+            ((System.ComponentModel.ISupportInitialize)Delay_trackbar).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-
-        private CheckBox Delay_Between_Scrapes;
         private Button ReScrape_Previous;
         private Button ReScape_From_Specific_Domain;
-        private TextBox Domain_Of_Choice;
         private TextBox New_Cookie_Needed_Domain;
         private Button Add_New_Cookie_Domain_Button;
-        private TextBox Delay_between_scrapes_seconds;
         private CheckBox One_Scrape_CheckBox;
+        private TrackBar Delay_trackbar;
+        private Label label1;
+        private Label label2;
+        private Label label3;
+        private ComboBox Domain_ComboBox;
+        private Button Refresh_Domain_ComboBox;
     }
 }

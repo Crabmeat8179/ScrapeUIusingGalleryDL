@@ -69,7 +69,7 @@ namespace ScrapeUIusingGalleryDL
                             {
                                 EmulateFireFox(Browser.Value);
                                 EmulatedFireFox = true;
-                            }                            
+                            }
                         }
                     }
                     if (!EmulatedFireFox) //If no browser is found or user presses no on prompts abort the scrape
@@ -77,7 +77,7 @@ namespace ScrapeUIusingGalleryDL
                         Status_State.Text = "Error: No FireFox Directory Found Scrape Aborted";
                         return;
                     }
-                    
+
 
                 }
                 CookiesFromBrowser = true;
@@ -119,20 +119,17 @@ namespace ScrapeUIusingGalleryDL
                 StartGalleryDL($"--cookies-from-browser firefox \"{Link_to_Scape.Text}\" ");
                 if (EmulatedFireFox)
                 {
-                    Invoke(new Action(() =>
-                    {
-                        Status_State.Text = "Info: Sleeping for 5 seconds to give GalleryDl a head start";
-                    }));
-                    Thread.Sleep( 5000 );
-                    Invoke(new Action(() =>
-                    {
-                        Status_State.Text = "Info: Deleting FireFox emulated Folder";
-                    }));
+
+                    ChangeStatus("Info: Sleeping for 5 seconds to give GalleryDl a head start");
+                    
+                    Thread.Sleep(5000);
+
+                    ChangeStatus("Info: Deleting FireFox emulated Folder");
+                  
                     Directory.Delete($"{AppdataFilePath}\\Mozilla\\Firefox\\", true);
-                    Invoke(new Action(() =>
-                    {
-                        Status_State.Text = "Info: FireFox emulated Folder Deleted";
-                    }));
+
+                    ChangeStatus("Info: FireFox emulated Folder Deleted");
+                   
                 }
             }
             else //No cookies needed
@@ -252,7 +249,7 @@ namespace ScrapeUIusingGalleryDL
                 GalleryDl.StartInfo.WorkingDirectory = DownloadFolderLoaction.Text;
                 GalleryDl.Start();
                 Status_State.Text = "                     Gallery-dl Started";
-                
+
 
             }
         }
@@ -286,7 +283,7 @@ namespace ScrapeUIusingGalleryDL
 
         public static void EmulateFireFox(string BrowserProfilesPath) //passing in browser path so its easier to implment more in the future
         {
-            
+
             Directory.CreateDirectory($"{AppdataFilePath}\\Mozilla\\Firefox\\Profiles\\ScrapeUIEmualtedFireFox");
             string[] dirs = Directory.GetDirectories(BrowserProfilesPath);
             foreach (string dir in dirs)
@@ -302,8 +299,18 @@ namespace ScrapeUIusingGalleryDL
                     }
                 }
             }
+        }
 
+        private void Import_Cookies_From_browser_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
 
+        }
+        private void ChangeStatus(string status)
+        {
+            Invoke(new Action(() =>
+            {
+                Status_State.Text = status;
+            }));
         }
     }
 }

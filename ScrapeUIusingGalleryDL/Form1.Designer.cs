@@ -190,6 +190,7 @@
             Import_Cookies_From_browser_CheckBox.TabIndex = 16;
             Import_Cookies_From_browser_CheckBox.Text = "Import Cookies From Browser";
             Import_Cookies_From_browser_CheckBox.UseVisualStyleBackColor = true;
+            Import_Cookies_From_browser_CheckBox.CheckedChanged += Import_Cookies_From_browser_CheckBox_CheckedChanged;
             // 
             // ScrapeUI
             // 
@@ -236,6 +237,6 @@
         private Button button1;
         private Button button2;
         private Button button3;
-        private CheckBox Import_Cookies_From_browser_CheckBox;
+        public CheckBox Import_Cookies_From_browser_CheckBox;
     }
 }
