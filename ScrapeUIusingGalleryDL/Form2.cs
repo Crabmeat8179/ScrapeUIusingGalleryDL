@@ -1,5 +1,8 @@
 ﻿
 using System.Diagnostics;
+using System.Net;
+using System.Net.Http;
+using Newtonsoft.Json.Linq;
 using static System.Windows.Forms.DataFormats;
 using static System.Windows.Forms.LinkLabel;
 
@@ -22,8 +25,8 @@ namespace ScrapeUIusingGalleryDL
         private void EXTRA_Window_Load(object sender, EventArgs e)
         {
             this.Delay_trackbar.Maximum = 12;
-            Refresh_Domain_ComboBox_Click(e,e);
-            
+            Refresh_Domain_ComboBox_Click(e, e);
+
 
         }
 
@@ -107,7 +110,7 @@ namespace ScrapeUIusingGalleryDL
                         }
                     }
                 }
-                else if(CookiesFromBrowser)
+                else if (CookiesFromBrowser)
                 {
                     StartGalleryDL($"--cookies-from-browser firefox \"{Links[i]}\" ");
                     ChangeStatus($"                     Links {i + 1}/{Links.Length} Complete");
@@ -123,7 +126,7 @@ namespace ScrapeUIusingGalleryDL
                 Directory.Delete($"{AppdataFilePath}\\Mozilla\\Firefox\\", true);
                 ChangeStatus("Info: FireFox emulated Folder Deleted");
             }
-           
+
         }
 
         private void StartGalleryDL(string arguments)
@@ -209,16 +212,19 @@ namespace ScrapeUIusingGalleryDL
             bool CookiesNeededForDomain = CookieNeededDetection(Domain_ComboBox.GetItemText(Domain_ComboBox.SelectedItem));
             for (int i = 0; i < Links.Length; i++)
             {
-                if (this.Delay_trackbar.Value > 0)
-                {
-                    Thread.Sleep((this.Delay_trackbar.Value * 5) * 1000);
-                }
+
                 if (Links[i].Contains(Domain_ComboBox.GetItemText(Domain_ComboBox.SelectedItem)))
                 {
+                    if (this.Delay_trackbar.Value > 0)
+                    {
+
+                        Thread.Sleep((this.Delay_trackbar.Value * 5) * 1000);
+
+                    }
                     //MessageBox.Show($"{Links[i]} is on the domain {Domain_Of_Choice.Text}");
                     if (CookiesNeededForDomain && !CookiesFromBrowser)
                     {
-                        foreach (string file in Directory.EnumerateFiles(Directory.GetCurrentDirectory() + "\\Cookies"))
+                        foreach (string file in Directory.EnumerateFiles(Directory.GetCurrentDirectory() + "\\Bin\\Cookies"))
                         {
                             if (file.Contains(Domain_ComboBox.GetItemText(Domain_ComboBox.SelectedItem)))
                             {
@@ -227,7 +233,7 @@ namespace ScrapeUIusingGalleryDL
                             }
                         }
                     }
-                    else if(CookiesFromBrowser)
+                    else if (CookiesFromBrowser)
                     {
                         StartGalleryDL($"--cookies-from-browser firefox \"{Links[i]}\" ");
                         ChangeStatus($"                     Links {i + 1}/{Links.Length} Complete");
@@ -303,7 +309,7 @@ namespace ScrapeUIusingGalleryDL
             Domain_ComboBox.Items.Clear();
             string[] Links = File.ReadAllLines("Bin\\Memory\\ScrapedLinks.txt");
             string[] LinksInComboBox = new string[Links.Length];
-            for(int i = 0; i < Links.Length; i++)
+            for (int i = 0; i < Links.Length; i++)
             {
                 string host = new Uri(Links[i]).Host.Replace("www.", "", StringComparison.OrdinalIgnoreCase);
                 if (!LinksInComboBox.Contains(host))
@@ -341,6 +347,57 @@ namespace ScrapeUIusingGalleryDL
                     }
                 }
             }
+        }
+
+        private void Delay_trackbar_Scroll(object sender, EventArgs e)
+        {
+
+        }
+        //https://api.github.com/repos/mikf/gallery-dl/releases/latest
+        private async void button1_Click_1Async(object sender, EventArgs e)
+        {
+            DialogResult UpdateQ = MessageBox.Show("Update/Reinstall GalleryDl are you sure?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (UpdateQ == DialogResult.No)
+            {
+                ChangeStatus("Update stopped");
+                return;
+            }
+            ChangeStatus("      Requesting Github");
+            HttpClient httpclient = new HttpClient();
+            httpclient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko"); //if there is no user agent then github will refuse the request
+            HttpResponseMessage httpResponseMessage = await httpclient.GetAsync("https://api.github.com/repos/mikf/gallery-dl/releases/latest");
+            string GithubReponse = await httpResponseMessage.Content.ReadAsStringAsync();
+            ChangeStatus("      Paring Response");
+            JObject root = JObject.Parse(GithubReponse);
+            string link = root["assets"]?.FirstOrDefault(a => a["name"]?.ToString() == "gallery-dl.exe")?["browser_download_url"]?.ToString(); //im not gonna pretend like i know what this doe this is ChatGPTs Code
+            if(!link.Contains("https://"))
+            {
+                ChangeStatus("Link not Found from GitHub Reponse");
+                return;
+            }
+            
+            try
+            {
+                ChangeStatus("      Deleting old exe");
+                if (File.Exists("Bin\\Dependencies\\gallery-dl.exe"))
+                {
+                    File.Delete("Bin\\Dependencies\\gallery-dl.exe");
+                }
+                
+                ChangeStatus("      Downloading");
+                using (WebClient Downloader = new WebClient())
+                {
+                    Downloader.DownloadFile(link, "Bin\\Dependencies\\gallery-dl.exe");
+                }
+                ChangeStatus("      Finished");
+            }
+            
+            catch(Exception ex)
+            {
+                //MessageBox.Show(ex.ToString());
+                ChangeStatus("Something went wrong");
+            }
+            
         }
     }
 }

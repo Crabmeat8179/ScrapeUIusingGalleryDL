@@ -101,7 +101,7 @@ namespace ScrapeUIusingGalleryDL
             if (CookieNeededDetection(Link_to_Scape.Text) && !CookiesFromBrowser) //If URL needs Cookies but User is not importing from browser
             {
                 Status_State.Text = "Link requires Cookies searching Cookies Folder";
-                foreach (string file in Directory.EnumerateFiles(Directory.GetCurrentDirectory() + "\\Cookies"))
+                foreach (string file in Directory.EnumerateFiles(Directory.GetCurrentDirectory() + "\\Bin\\Cookies"))
                 {
                     string host = new Uri(Link_to_Scape.Text).Host.Replace("www.", "", StringComparison.OrdinalIgnoreCase); //Get host from URl so if input is https://x.com/elonmusk host will be x.com
                     if (file.Contains(host))

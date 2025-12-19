@@ -39,12 +39,13 @@
             label3 = new Label();
             Domain_ComboBox = new ComboBox();
             Refresh_Domain_ComboBox = new Button();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)Delay_trackbar).BeginInit();
             SuspendLayout();
             // 
             // ReScrape_Previous
             // 
-            ReScrape_Previous.Location = new Point(52, 22);
+            ReScrape_Previous.Location = new Point(222, 201);
             ReScrape_Previous.Name = "ReScrape_Previous";
             ReScrape_Previous.Size = new Size(205, 52);
             ReScrape_Previous.TabIndex = 12;
@@ -54,7 +55,7 @@
             // 
             // ReScape_From_Specific_Domain
             // 
-            ReScape_From_Specific_Domain.Location = new Point(52, 201);
+            ReScape_From_Specific_Domain.Location = new Point(11, 202);
             ReScape_From_Specific_Domain.Name = "ReScape_From_Specific_Domain";
             ReScape_From_Specific_Domain.Size = new Size(205, 51);
             ReScape_From_Specific_Domain.TabIndex = 14;
@@ -64,7 +65,7 @@
             // 
             // New_Cookie_Needed_Domain
             // 
-            New_Cookie_Needed_Domain.Location = new Point(393, 172);
+            New_Cookie_Needed_Domain.Location = new Point(432, 173);
             New_Cookie_Needed_Domain.Name = "New_Cookie_Needed_Domain";
             New_Cookie_Needed_Domain.Size = new Size(205, 23);
             New_Cookie_Needed_Domain.TabIndex = 16;
@@ -72,7 +73,7 @@
             // 
             // Add_New_Cookie_Domain_Button
             // 
-            Add_New_Cookie_Domain_Button.Location = new Point(393, 201);
+            Add_New_Cookie_Domain_Button.Location = new Point(432, 202);
             Add_New_Cookie_Domain_Button.Name = "Add_New_Cookie_Domain_Button";
             Add_New_Cookie_Domain_Button.Size = new Size(205, 51);
             Add_New_Cookie_Domain_Button.TabIndex = 17;
@@ -100,6 +101,7 @@
             Delay_trackbar.Name = "Delay_trackbar";
             Delay_trackbar.Size = new Size(194, 45);
             Delay_trackbar.TabIndex = 20;
+            Delay_trackbar.Scroll += Delay_trackbar_Scroll;
             // 
             // label1
             // 
@@ -131,7 +133,7 @@
             // Domain_ComboBox
             // 
             Domain_ComboBox.FormattingEnabled = true;
-            Domain_ComboBox.Location = new Point(52, 172);
+            Domain_ComboBox.Location = new Point(12, 172);
             Domain_ComboBox.Name = "Domain_ComboBox";
             Domain_ComboBox.Size = new Size(124, 23);
             Domain_ComboBox.TabIndex = 24;
@@ -139,7 +141,7 @@
             // 
             // Refresh_Domain_ComboBox
             // 
-            Refresh_Domain_ComboBox.Location = new Point(182, 172);
+            Refresh_Domain_ComboBox.Location = new Point(142, 172);
             Refresh_Domain_ComboBox.Name = "Refresh_Domain_ComboBox";
             Refresh_Domain_ComboBox.Size = new Size(75, 23);
             Refresh_Domain_ComboBox.TabIndex = 25;
@@ -147,11 +149,22 @@
             Refresh_Domain_ComboBox.UseVisualStyleBackColor = true;
             Refresh_Domain_ComboBox.Click += Refresh_Domain_ComboBox_Click;
             // 
+            // button1
+            // 
+            button1.Location = new Point(11, 24);
+            button1.Name = "button1";
+            button1.Size = new Size(205, 49);
+            button1.TabIndex = 26;
+            button1.Text = "Update/ reinstall GalleryDL";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click_1Async;
+            // 
             // EXTRA_Window
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(649, 299);
+            Controls.Add(button1);
             Controls.Add(Refresh_Domain_ComboBox);
             Controls.Add(Domain_ComboBox);
             Controls.Add(label3);
@@ -185,5 +198,6 @@
         private Label label3;
         private ComboBox Domain_ComboBox;
         private Button Refresh_Domain_ComboBox;
+        private Button button1;
     }
 }
