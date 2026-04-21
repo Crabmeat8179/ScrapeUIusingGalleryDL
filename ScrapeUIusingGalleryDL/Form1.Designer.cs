@@ -43,6 +43,10 @@
             button2 = new Button();
             button3 = new Button();
             Import_Cookies_From_browser_CheckBox = new CheckBox();
+            button4 = new Button();
+            button5 = new Button();
+            Fav_button = new Button();
+            Add_Fav_Button = new Button();
             SuspendLayout();
             // 
             // DownloadFolderLoaction
@@ -133,9 +137,9 @@
             // 
             // Link_From_ClipBoard
             // 
-            Link_From_ClipBoard.Location = new Point(628, 193);
+            Link_From_ClipBoard.Location = new Point(613, 193);
             Link_From_ClipBoard.Name = "Link_From_ClipBoard";
-            Link_From_ClipBoard.Size = new Size(104, 23);
+            Link_From_ClipBoard.Size = new Size(101, 23);
             Link_From_ClipBoard.TabIndex = 10;
             Link_From_ClipBoard.Text = "From ClipBoard";
             Link_From_ClipBoard.UseVisualStyleBackColor = true;
@@ -192,11 +196,55 @@
             Import_Cookies_From_browser_CheckBox.UseVisualStyleBackColor = true;
             Import_Cookies_From_browser_CheckBox.CheckedChanged += Import_Cookies_From_browser_CheckBox_CheckedChanged;
             // 
+            // button4
+            // 
+            button4.Location = new Point(720, 192);
+            button4.Name = "button4";
+            button4.Size = new Size(75, 23);
+            button4.TabIndex = 17;
+            button4.Text = "All Scrape";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
+            // 
+            // button5
+            // 
+            button5.Location = new Point(716, 300);
+            button5.Name = "button5";
+            button5.Size = new Size(75, 23);
+            button5.TabIndex = 18;
+            button5.Text = "Stats";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
+            // 
+            // Fav_button
+            // 
+            Fav_button.Location = new Point(720, 222);
+            Fav_button.Name = "Fav_button";
+            Fav_button.Size = new Size(75, 23);
+            Fav_button.TabIndex = 19;
+            Fav_button.Text = "Favourites";
+            Fav_button.UseVisualStyleBackColor = true;
+            Fav_button.Click += Fav_button_Click;
+            // 
+            // Add_Fav_Button
+            // 
+            Add_Fav_Button.Location = new Point(618, 222);
+            Add_Fav_Button.Name = "Add_Fav_Button";
+            Add_Fav_Button.Size = new Size(96, 23);
+            Add_Fav_Button.TabIndex = 20;
+            Add_Fav_Button.Text = "Add Favourite";
+            Add_Fav_Button.UseVisualStyleBackColor = true;
+            Add_Fav_Button.Click += button7_Click;
+            // 
             // ScrapeUI
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 359);
+            Controls.Add(Add_Fav_Button);
+            Controls.Add(Fav_button);
+            Controls.Add(button5);
+            Controls.Add(button4);
             Controls.Add(Import_Cookies_From_browser_CheckBox);
             Controls.Add(button3);
             Controls.Add(button2);
@@ -238,5 +286,9 @@
         private Button button2;
         private Button button3;
         public CheckBox Import_Cookies_From_browser_CheckBox;
+        private Button button4;
+        private Button button5;
+        private Button Fav_button;
+        private Button Add_Fav_Button;
     }
 }

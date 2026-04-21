@@ -246,6 +246,27 @@ namespace ScrapeUIusingGalleryDL
                 else { }
 
                 ChangeStatus($"                     Links {i + 1}/{Links.Length} Complete");
+                string ScrapeCountFile = "Bin\\Memory\\Scount.txt";
+                int currentCount = 0;
+
+                if (File.Exists(ScrapeCountFile))
+                {
+                    string fileContent = File.ReadAllText(ScrapeCountFile).Trim();
+
+
+                    if (!int.TryParse(fileContent, out currentCount))
+                    {
+                        currentCount = 0; // Reset to 0 if the file contains weird text
+                    }
+                }
+                else
+                {
+
+                }
+
+                currentCount++;
+
+                File.WriteAllText(ScrapeCountFile, currentCount.ToString());
 
             }
             if (EmulatedFireFox)
@@ -369,6 +390,14 @@ namespace ScrapeUIusingGalleryDL
             string GithubReponse = await httpResponseMessage.Content.ReadAsStringAsync();
             ChangeStatus("      Paring Response");
             JObject root = JObject.Parse(GithubReponse);
+            if (!Directory.Exists("Bin\\Dependencies"))
+            {
+                Directory.CreateDirectory("Bin\\Dependencies");
+            }
+            {
+                ChangeStatus("      Deleting old exe");
+                File.Delete("Bin\\Dependencies\\gallery-dl.exe");
+            }
             string link = root["assets"]?.FirstOrDefault(a => a["name"]?.ToString() == "gallery-dl.exe")?["browser_download_url"]?.ToString(); //im not gonna pretend like i know what this doe this is ChatGPTs Code
             if(!link.Contains("https://"))
             {

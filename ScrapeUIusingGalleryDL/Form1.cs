@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using static System.Windows.Forms.LinkLabel;
 
 namespace ScrapeUIusingGalleryDL
@@ -13,7 +14,7 @@ namespace ScrapeUIusingGalleryDL
         {
             InitializeComponent();
         }
-
+        
         private void Folder_Location_Browse_Button_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog dialog = new FolderBrowserDialog();
@@ -121,15 +122,15 @@ namespace ScrapeUIusingGalleryDL
                 {
 
                     ChangeStatus("Info: Sleeping for 5 seconds to give GalleryDl a head start");
-                    
+
                     Thread.Sleep(5000);
 
                     ChangeStatus("Info: Deleting FireFox emulated Folder");
-                  
+
                     Directory.Delete($"{AppdataFilePath}\\Mozilla\\Firefox\\", true);
 
                     ChangeStatus("Info: FireFox emulated Folder Deleted");
-                   
+
                 }
             }
             else //No cookies needed
@@ -137,6 +138,35 @@ namespace ScrapeUIusingGalleryDL
                 StartGalleryDL(Link_to_Scape.Text);
 
             }
+            if (!File.Exists("Bin\\Memory\\Scount.txt"))
+            {
+                File.Create("Bin\\Memory\\Scount.txt").Close();
+            }
+
+            string ScrapeCountFile = "Bin\\Memory\\Scount.txt";
+            int currentCount = 0;
+
+            if (File.Exists(ScrapeCountFile))
+            {
+                string fileContent = File.ReadAllText(ScrapeCountFile).Trim();
+
+
+                if (!int.TryParse(fileContent, out currentCount))
+                {
+                    currentCount = 0; // Reset to 0 if the file contains weird text
+                }
+            }
+            else
+            {
+
+            }
+
+            currentCount++;
+
+            File.WriteAllText(ScrapeCountFile, currentCount.ToString());
+
+
+
         }
 
 
@@ -172,6 +202,10 @@ namespace ScrapeUIusingGalleryDL
             }
             DownloadFolderLoaction.Text = File.ReadAllText("Bin\\Memory\\SavedFilePath.txt");
             Status_State.Text = $"Path: {File.ReadAllText("Bin\\Memory\\SavedFilePath.txt")} Loaded From SavedFilePath.txt";
+            if (!Directory.Exists(DownloadFolderLoaction.Text))
+            {
+                MessageBox.Show("The saved download path does not currently exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void Status_State_Click(object sender, EventArgs e)
         {
@@ -311,6 +345,101 @@ namespace ScrapeUIusingGalleryDL
             {
                 Status_State.Text = status;
             }));
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            AllScarapesSelectionForm form = new AllScarapesSelectionForm(this);
+            form.ShowDialog();
+            //Get the latest scrape in the list and paste it into the scrape link text box
+            //string[] Links = File.ReadAllLines("Bin\\Memory\\ScrapedLinks.txt");
+            //Link_to_Scape.Text = Links[Links.Length - 1];
+            //ChangeStatus("             Last Scraped Link Inserted");
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            string counterPath = "Bin\\Memory\\Scount.txt";
+            string displayCount = "0"; // Default if file doesn't exist
+
+            if (File.Exists(counterPath))
+            {
+                string content = File.ReadAllText(counterPath).Trim();
+                if (!string.IsNullOrEmpty(content))
+                {
+                    displayCount = content; // Just take the number as it is
+                }
+            }
+
+            // 2. Process the domains from the links file
+            Dictionary<string, int> domainCounts = new Dictionary<string, int>();
+            string linksPath = "Bin\\Memory\\ScrapedLinks.txt";
+
+            if (File.Exists(linksPath))
+            {
+                string[] Links = File.ReadAllLines(linksPath);
+                foreach (string link in Links)
+                {
+                    try
+                    {
+                        string host = new Uri(link).Host.Replace("www.", "", StringComparison.OrdinalIgnoreCase);
+                        if (domainCounts.ContainsKey(host)) domainCounts[host]++;
+                        else domainCounts[host] = 1;
+                    }
+                    catch { /* Skip invalid URLs */ }
+                }
+            }
+
+            // 3. Build the combined message
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Stats of your scraped and saved links:");
+
+            // Add the domain list (Highest count first)
+            foreach (var entry in domainCounts.OrderByDescending(x => x.Value))
+            {
+                sb.AppendLine($"{entry.Key} {entry.Value}");
+            }
+
+            // Add the gap and the raw number from Scount.txt
+            sb.AppendLine();
+            sb.AppendLine($"Total Scrapes: {displayCount}");
+
+            // Show the popup
+            MessageBox.Show(sb.ToString(), "Scraper Results", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists("Bin\\Memory\\Favs.txt"))
+            {
+                File.Create("Bin\\Memory\\Favs.txt").Close();
+            }
+            if (!File.ReadAllLines("Bin\\Memory\\Favs.txt").Contains(Link_to_Scape.Text))
+            {
+                if (!Link_to_Scape.Text.Contains("http"))
+                {
+                    ChangeStatus("                        Not a valid link");
+                    return;
+                }
+                using (StreamWriter sw = new StreamWriter("Bin\\Memory\\Favs.txt", true))
+                {
+                    sw.WriteLine(Link_to_Scape.Text);
+                    ChangeStatus(Link_to_Scape.Text + " Added to Favs.txt");
+                }
+            }
+            else
+            {
+                ChangeStatus("Link already exists in your Favourites");
+            }
+
+        }
+
+        private void Fav_button_Click(object sender, EventArgs e)
+        {
+            // Inside ScrapeUI.cs
+            SelectionForm selForm = new SelectionForm(this); // 'this' refers to the ACTIVE window
+            selForm.Show();
+
         }
     }
 }
