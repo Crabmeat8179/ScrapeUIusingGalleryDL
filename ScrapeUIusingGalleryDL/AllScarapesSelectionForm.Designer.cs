@@ -60,7 +60,7 @@
             Controls.Add(btnOk);
             Controls.Add(ListLinks);
             Name = "AllScarapesSelectionForm";
-            Text = "AllScarapesSelectionForm";
+            Text = "All Scrapes";
             Load += AllScarapesSelectionForm_Load_1;
             ResumeLayout(false);
         }

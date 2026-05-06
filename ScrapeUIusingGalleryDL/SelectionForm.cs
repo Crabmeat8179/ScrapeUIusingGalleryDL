@@ -15,11 +15,7 @@ namespace ScrapeUIusingGalleryDL
 
 
         private ScrapeUI Scrapeui;
-        public SelectionForm(string[] links)
-        {
-            InitializeComponent();
-            listLinks.Items.AddRange(links);
-        }
+       
         public SelectionForm(ScrapeUI form1) // All of this BS is so i can change and access shit from the main window
         {
             InitializeComponent();

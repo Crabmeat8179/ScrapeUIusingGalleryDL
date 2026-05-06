@@ -13,10 +13,7 @@ namespace ScrapeUIusingGalleryDL
         static readonly string AppdataFilePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData); //i used it this much i put it here to save time :P
 
         private ScrapeUI Scrapeui;
-        public EXTRA_Window()
-        {
-            InitializeComponent();
-        }
+        
         public EXTRA_Window(ScrapeUI form1) // All of this BS is so i can change and access shit from the main window
         {
             InitializeComponent();
@@ -383,50 +380,64 @@ namespace ScrapeUIusingGalleryDL
                 ChangeStatus("Update stopped");
                 return;
             }
-            ChangeStatus("      Requesting Github");
-            HttpClient httpclient = new HttpClient();
-            httpclient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko"); //if there is no user agent then github will refuse the request
-            HttpResponseMessage httpResponseMessage = await httpclient.GetAsync("https://api.github.com/repos/mikf/gallery-dl/releases/latest");
-            string GithubReponse = await httpResponseMessage.Content.ReadAsStringAsync();
-            ChangeStatus("      Paring Response");
-            JObject root = JObject.Parse(GithubReponse);
-            if (!Directory.Exists("Bin\\Dependencies"))
+
+            ChangeStatus("      Requesting Codeberg API");
+
+            using (HttpClient httpclient = new HttpClient())
             {
-                Directory.CreateDirectory("Bin\\Dependencies");
-            }
-            {
-                ChangeStatus("      Deleting old exe");
-                File.Delete("Bin\\Dependencies\\gallery-dl.exe");
-            }
-            string link = root["assets"]?.FirstOrDefault(a => a["name"]?.ToString() == "gallery-dl.exe")?["browser_download_url"]?.ToString(); //im not gonna pretend like i know what this doe this is ChatGPTs Code
-            if(!link.Contains("https://"))
-            {
-                ChangeStatus("Link not Found from GitHub Reponse");
-                return;
-            }
-            
-            try
-            {
-                ChangeStatus("      Deleting old exe");
-                if (File.Exists("Bin\\Dependencies\\gallery-dl.exe"))
+                httpclient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");
+
+                try
                 {
-                    File.Delete("Bin\\Dependencies\\gallery-dl.exe");
+                    HttpResponseMessage httpResponseMessage = await httpclient.GetAsync("https://codeberg.org/api/v1/repos/mikf/gallery-dl/releases/latest");
+                    string responseString = await httpResponseMessage.Content.ReadAsStringAsync();
+
+                    ChangeStatus("      Parsing Response");
+
+                    JObject root = JObject.Parse(responseString);
+
+                    // Ensure directory exists
+                    if (!Directory.Exists("Bin\\Dependencies"))
+                    {
+                        Directory.CreateDirectory("Bin\\Dependencies");
+                    }
+
+                    // Delete old file if it exists
+                    string targetPath = "Bin\\Dependencies\\gallery-dl.exe";
+                    if (File.Exists(targetPath))
+                    {
+                        File.Delete(targetPath);
+                        ChangeStatus("      Deleted old exe");
+                    }
+
+                    // Find the correct asset
+                    string link = root["assets"]?
+                        .FirstOrDefault(a => a["name"]?.ToString() == "gallery-dl.exe")?["browser_download_url"]?
+                        .ToString();
+
+                    if (string.IsNullOrEmpty(link) || !link.StartsWith("https://"))
+                    {
+                        ChangeStatus("      Download link not found");
+                        MessageBox.Show("Could not find gallery-dl.exe download link in the API response.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    // Download the file
+                    ChangeStatus("      Downloading new version");
+                    using (WebClient downloader = new WebClient())
+                    {
+                        downloader.DownloadFile(link, targetPath);
+                    }
+
+                    ChangeStatus("      Update Finished Successfully");
+                    MessageBox.Show("Gallery-dl has been successfully updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                
-                ChangeStatus("      Downloading");
-                using (WebClient Downloader = new WebClient())
+                catch (Exception ex)
                 {
-                    Downloader.DownloadFile(link, "Bin\\Dependencies\\gallery-dl.exe");
+                    ChangeStatus("      Update Failed");
+                    MessageBox.Show($"An error occurred during the update:\n\n{ex.Message}", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                ChangeStatus("      Finished");
             }
-            
-            catch(Exception ex)
-            {
-                //MessageBox.Show(ex.ToString());
-                ChangeStatus("Something went wrong");
-            }
-            
         }
     }
 }

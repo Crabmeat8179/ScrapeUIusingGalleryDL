@@ -59,7 +59,7 @@
             Controls.Add(btnOk);
             Controls.Add(listLinks);
             Name = "SelectionForm";
-            Text = "Form3";
+            Text = "Favs";
             Load += SelectionForm_Load;
             ResumeLayout(false);
         }
